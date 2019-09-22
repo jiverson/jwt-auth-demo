@@ -31,6 +31,8 @@ $ http -v POST http://127.0.0.1:9090/register/ email=foo2@bar.com password=12345
 
 $ # login
 $ http -v POST http://127.0.0.1:9090/login/ email=foo2@bar.com password=123456ww
+
+http -v GET http://127.0.0.1:9090/me
 ```
 
 ### Todo api calls

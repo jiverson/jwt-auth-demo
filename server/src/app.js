@@ -19,8 +19,13 @@ const corsOptions = {
     app.use(bodyParser.json())
     app.use(express.urlencoded({ extended: false }))
     app.use(cookieParser())
-
     app.use("/", routes)
+    app.use((err, _req, res, _next) => {
+        console.log("An error was thrown") // DEBUG
+        console.error(err.stack)
+        res.json({ message: err.message })
+        // res.status(500).send("Something broke!")
+    })
 
     app.listen(9090, () => {
         console.log("express server started")

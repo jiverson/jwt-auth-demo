@@ -1,10 +1,11 @@
 const Router = require("express-promise-router")
-const SchemaValidator = require("./schema-validator")
+const schemaValidator = require("./schema-validator")
+const auth = require("./auth")
 const db = require("./db")
-const users = require("./users")
+const user = require("./user")
 
 const router = new Router()
-const validateRequest = SchemaValidator(true)
+const validateRequest = schemaValidator(true)
 
 router.get("/", (_req, res) => res.send("Hello world"))
 
@@ -13,38 +14,14 @@ router.get("/pg", async (_req, res) => {
     res.send(rows[0].message)
 })
 
-router.post("/revoke_token", async (req, res) => {
-    await users.revokeToken(req.body)
-    res.send(true)
-})
+router.post("/register", validateRequest, user.register)
+router.post("/login", validateRequest, user.login)
+router.post("/logout", user.logout)
 
-router.post("/refresh_token", async (req, res) => {
-    const token = req.cookies.jid
-    const { refresh_token, ...data } = users.refreshToken(token)
-    res.cookie("jid", refresh_token, {
-        httpOnly: true,
-        path: "/refresh_token"
-    })
-    res.send(data)
-})
+router.post("/refresh_token", user.refreshToken)
+router.post("/revoke_token", user.revokeToken)
 
-router.post("/register", validateRequest, users.register)
-
-router.post("/login", validateRequest, async (req, res) => {
-    const { refresh_token, ...data } = await users.login(req.body)
-    res.cookie("jid", refresh_token, {
-        httpOnly: true,
-        path: "/refresh_token"
-    })
-    res.send(data)
-})
-
-router.post("/logout", async (_req, res) => {
-    res.cookie("jid", "", {
-        httpOnly: true,
-        path: "/refresh_token"
-    })
-    res.send(true)
-})
+router.get("/me", auth, user.me)
+router.get("/bye", auth, user.bye)
 
 module.exports = router
