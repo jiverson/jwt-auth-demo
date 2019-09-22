@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_DB: jwt-auth-demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    container_name: jwt-auth-demo_postgres
+    ports:
+      - 54320:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:

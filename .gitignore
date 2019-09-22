@@ -1,0 +1,8 @@
+.idea
+.vscode
+.history
+node_modules
+
+# dotenv environment variables file
+.env
+.env.test
