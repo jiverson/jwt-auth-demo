@@ -8,10 +8,10 @@ const { createRefreshToken, createAccessToken } = require("./token-util")
 const invalidCredentials = (res) =>
     res.status(401).json({
         status: "failed",
-        error: "Your email or your password were entered incorrectly."
+        error: "Your email or your password was entered incorrectly."
     })
 
-const register = async (req, res) => {
+exports.register = async (req, res) => {
     const { email, password } = req.body
     const hashedPassword = await hash(password, 12)
 
@@ -22,7 +22,7 @@ const register = async (req, res) => {
     res.send(data)
 }
 
-const login = async (req, res) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body
 
     const {
@@ -53,7 +53,7 @@ const login = async (req, res) => {
     })
 }
 
-const refreshToken = async (req, res) => {
+exports.refreshToken = async (req, res) => {
     const token = req.cookies.jid
 
     if (!token) {
@@ -88,19 +88,19 @@ const refreshToken = async (req, res) => {
     return res.send({ access_token: createAccessToken(user) })
 }
 
-const revokeToken = async (req, res) => {
+exports.revokeToken = async (req, res) => {
     const { userId } = req.body
     await db.updateToken([userId])
 
     res.send(true)
 }
 
-const logout = (_req, res) => {
+exports.logout = (_req, res) => {
     res.clearCookie("jid", { httpOnly: true, path: "/refresh_token" })
     res.send(true)
 }
 
-const me = async (_req, res) => {
+exports.me = async (_req, res) => {
     const { payload } = res.locals
 
     const {
@@ -110,16 +110,6 @@ const me = async (_req, res) => {
     res.send(user)
 }
 
-const bye = (_req, res) => {
+exports.whoami = (_req, res) => {
     res.send(`your user id is: ${res.locals.payload.userId}`)
-}
-
-module.exports = {
-    register,
-    login,
-    logout,
-    refreshToken,
-    revokeToken,
-    me,
-    bye
 }

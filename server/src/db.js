@@ -1,18 +1,8 @@
 const { Pool, Client } = require("pg")
 const pool = new Pool()
 
-// pool.query("SELECT NOW()", (err, res) => {
-//     console.log(err, res)
-//     pool.end()
-// })
-
 // const client = new Client()
 // client.connect()
-
-// client.query("SELECT NOW()", (err, res) => {
-//     console.log(err, res)
-//     client.end()
-// })
 
 const createUser = `
     INSERT INTO users (email, password, created_at, updated_at)
@@ -21,7 +11,7 @@ const createUser = `
 `
 
 const findUserByEmail = `
-    SELECT id, email, password, token_version as "tokenVersion"
+    SELECT id, email, password, token_version AS "tokenVersion"
     FROM users
     WHERE(email = $1)
     ORDER BY id
@@ -37,7 +27,7 @@ const findUserById = `
 `
 
 const getToken = `
-    SELECT id, token_version as "tokenVersion"
+    SELECT id, token_version AS "tokenVersion"
     FROM users
     WHERE (id = $1)
     ORDER BY id

@@ -24,7 +24,6 @@ const corsOptions = {
         console.log("An error was thrown") // DEBUG
         console.error(err.stack)
         res.json({ message: err.message })
-        // res.status(500).send("Something broke!")
     })
 
     app.listen(9090, () => {
