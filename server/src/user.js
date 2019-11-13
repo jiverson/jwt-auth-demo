@@ -5,7 +5,7 @@ const db = require("./db")
 
 const { createRefreshToken, createAccessToken } = require("./token-util")
 
-const invalidCredentials = (res) =>
+const invalidCredentials = res =>
     res.status(401).json({
         status: "failed",
         error: "Your email or your password was entered incorrectly."
@@ -100,7 +100,7 @@ exports.logout = (_req, res) => {
     res.send(true)
 }
 
-exports.me = async (_req, res) => {
+exports.profile = async (_req, res) => {
     const { payload } = res.locals
 
     const {

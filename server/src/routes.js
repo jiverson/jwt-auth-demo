@@ -15,7 +15,7 @@ router.post("/logout", user.logout)
 router.post("/refresh_token", user.refreshToken)
 router.post("/revoke_token", user.revokeToken)
 
-router.get("/me", auth, user.me)
+router.get("/profile", auth, user.profile)
 router.get("/whoami", auth, user.whoami)
 
 module.exports = router
