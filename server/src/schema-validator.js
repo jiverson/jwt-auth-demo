@@ -1,4 +1,4 @@
-const Joi = require("joi")
+const Joi = require("@hapi/joi")
 const schemas = require("./schemas")
 
 const supportedMethods = ["post", "put"]
@@ -14,33 +14,39 @@ module.exports = (useJoiError = false) => (req, res, next) => {
     const schema = schemas[route]
 
     if (supportedMethods.includes(method) && schema) {
-        return Joi.validate(req.body, schema, validationOptions, (err, data) => {
-            if (!err) {
-                // Replace req.body with the data after Joi validation
-                req.body = data
-                return next()
-            }
-
-            const joiError = {
-                status: "failed",
-                error: {
-                    original: err._object,
-                    // fetch only message and type from each error
-                    details: err.details.map(({ message, type }) => ({
-                        message: message.replace(/['"]/g, ""),
-                        type
-                    }))
+        return Joi.validate(
+            req.body,
+            schema,
+            validationOptions,
+            (err, data) => {
+                if (!err) {
+                    // Replace req.body with the data after Joi validation
+                    req.body = data
+                    return next()
                 }
-            }
 
-            const customError = {
-                status: "failed",
-                error: "Invalid request data. Please review request and try again."
-            }
+                const joiError = {
+                    status: "failed",
+                    error: {
+                        original: err._object,
+                        // fetch only message and type from each error
+                        details: err.details.map(({ message, type }) => ({
+                            message: message.replace(/['"]/g, ""),
+                            type
+                        }))
+                    }
+                }
 
-            // Send back the JSON error response
-            res.status(422).json(useJoiError ? joiError : customError)
-        })
+                const customError = {
+                    status: "failed",
+                    error:
+                        "Invalid request data. Please review request and try again."
+                }
+
+                // Send back the JSON error response
+                res.status(422).json(useJoiError ? joiError : customError)
+            }
+        )
     }
 
     next()

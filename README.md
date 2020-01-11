@@ -5,6 +5,7 @@
 Start the database:
 
 ```
+$ cd server
 $ docker-compose up -d
 ```
  
@@ -39,7 +40,7 @@ $ http -v POST http://127.0.0.1:9090/register/ email=foo2@bar.com password=12345
 $ # login
 $ http -v POST http://127.0.0.1:9090/login/ email=foo2@bar.com password=123456ww
 
-http -v GET http://127.0.0.1:9090/me
+$ http -v GET http://127.0.0.1:9090/me
 ```
 
 ### Links
@@ -48,8 +49,6 @@ http -v GET http://127.0.0.1:9090/me
 * https://github.com/arb/celebrate
 * https://www.loggly.com/blog/http-status-code-diagram/
 * https://scotch.io/tutorials/the-anatomy-of-a-json-web-token
-* https://blog.angularindepth.com/top-10-ways-to-use-interceptors-in-angular-db450f8a62d6
-* https://github.com/melcor76/interceptors
 * https://blog.angularindepth.com/top-10-ways-to-use-interceptors-in-angular-db450f8a62d6
 * https://github.com/melcor76/interceptors
 * https://stackblitz.com/github/melcor76/interceptors?file=src%2Fapp%2Fcomponents%2Fauth.component.ts
@@ -62,4 +61,5 @@ http -v GET http://127.0.0.1:9090/me
 #### TODO
 * add in joi celebrate
 * add in proper claims for jwt token information
+* use sqllite
 
