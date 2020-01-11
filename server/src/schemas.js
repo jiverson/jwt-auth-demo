@@ -1,6 +1,6 @@
 const Joi = require("@hapi/joi")
 
-const usersDataSchema = Joi.object().keys({
+const usersDataSchema = Joi.object({
     email: Joi.string()
         .email()
         .lowercase()
