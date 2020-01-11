@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core"
 import { BrowserModule } from "@angular/platform-browser"
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http"
-import { FormsModule } from "@angular/forms"
+import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { Routes, RouterModule } from "@angular/router"
 
 import { AppComponent } from "./app.component"
@@ -25,17 +25,25 @@ const appRoutes: Routes = [
 ]
 
 @NgModule({
-    declarations: [AppComponent, LoginComponent, RegisterComponent, UserComponent],
+    declarations: [
+        AppComponent,
+        LoginComponent,
+        RegisterComponent,
+        UserComponent
+    ],
     imports: [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpClientModule,
         RouterModule.forRoot(
             appRoutes
             // { enableTracing: true } // <-- debugging purposes only
         )
     ],
-    providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {}
