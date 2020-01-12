@@ -33,7 +33,6 @@ export class UserComponent implements OnInit {
     ngOnInit() {
         this.api.profile().subscribe(
             data => {
-                console.log("1 --> data", data) // DEBUG
                 this.email = data.email
                 this.id = data.id
             },
