@@ -14,7 +14,7 @@ const corsOptions = {
 ;(async () => {
     const app = express()
 
-    // app.use(cors(corsOptions))
+    app.use(cors(corsOptions))
     app.use(express.json())
     app.use(bodyParser.json())
     app.use(express.urlencoded({ extended: false }))
@@ -27,6 +27,6 @@ const corsOptions = {
     })
 
     app.listen(9090, () => {
-        console.log("express server started")
+        console.log("express server started on port http://localhost:9090")
     })
 })()

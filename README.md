@@ -54,6 +54,9 @@ $ http -v GET http://127.0.0.1:9090/me
 * https://stackblitz.com/github/melcor76/interceptors?file=src%2Fapp%2Fcomponents%2Fauth.component.ts
 * https://angular-academy.com/angular-jwt/
 * https://github.com/newsiberian/apollo-link-token-refresh
+* https://blog.angular-university.io/angular-jwt-authentication/
+* https://github.com/http-party/node-http-proxy
+
 
 
 

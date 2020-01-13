@@ -3,9 +3,12 @@
     "target": "http://localhost:9090",
     "secure": false,
     "logLevel": "debug",
-    "changeOrigin": true,
+    "changeOrigin": false,
     "pathRewrite": {
       "^/api": ""
+    },
+    "cookiePathRewrite": {
+      "/refresh_token": "/api/refresh_token"
     }
   }
 }
