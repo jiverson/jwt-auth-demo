@@ -25,12 +25,7 @@ const appRoutes: Routes = [
 ]
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        LoginComponent,
-        RegisterComponent,
-        UserComponent
-    ],
+    declarations: [AppComponent, LoginComponent, RegisterComponent, UserComponent],
     imports: [
         BrowserModule,
         FormsModule,
@@ -41,9 +36,7 @@ const appRoutes: Routes = [
             // { enableTracing: true } // <-- debugging purposes only
         )
     ],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
-    ],
+    providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

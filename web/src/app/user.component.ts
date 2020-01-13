@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { ApiService } from "./api.service"
+import { Router } from "@angular/router"
 
 @Component({
     selector: "app-root",
@@ -28,7 +29,7 @@ export class UserComponent implements OnInit {
     email: string | null
     id: number | null
 
-    constructor(private api: ApiService) {}
+    constructor(private api: ApiService, private router: Router) {}
 
     ngOnInit() {
         this.api.profile().subscribe(
@@ -37,7 +38,7 @@ export class UserComponent implements OnInit {
                 this.id = data.id
             },
             error => {
-                setTimeout(() => alert(error.statusText))
+                this.router.navigate(["/login"])
             }
         )
     }

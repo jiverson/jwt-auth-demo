@@ -34,7 +34,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                     class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
                 >
                     <h1 class="block text-gray-700 text-5xl mb-2">Register</h1>
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label
                             for="firstName"
                             class="block text-gray-700 text-sm font-bold mb-2"
@@ -52,14 +52,14 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                         />
                         <div
                             *ngIf="submitted && f.firstName.errors"
-                            class="text-red-500 text-xs italic"
+                            class="absolute text-red-500 text-xs italic"
                         >
                             <div *ngIf="f.firstName.errors.required">
                                 First Name is required
                             </div>
                         </div>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label
                             for="lastName"
                             class="block text-gray-700 text-sm font-bold mb-2"
@@ -77,14 +77,14 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                         />
                         <div
                             *ngIf="submitted && f.lastName.errors"
-                            class="text-red-500 text-xs italic"
+                            class="absolute text-red-500 text-xs italic"
                         >
                             <div *ngIf="f.lastName.errors.required">
                                 Last Name is required
                             </div>
                         </div>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label
                             for="email"
                             class="block text-gray-700 text-sm font-bold mb-2"
@@ -102,7 +102,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                         />
                         <div
                             *ngIf="submitted && f.email.errors"
-                            class="text-red-500 text-xs italic"
+                            class="absolute text-red-500 text-xs italic"
                         >
                             <div *ngIf="f.email.errors.required">
                                 Email is required
@@ -112,7 +112,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                             </div>
                         </div>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label
                             for="password"
                             class="block text-gray-700 text-sm font-bold mb-2"
@@ -130,7 +130,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                         />
                         <div
                             *ngIf="submitted && f.password.errors"
-                            class="text-red-500 text-xs italic"
+                            class="absolute text-red-500 text-xs italic"
                         >
                             <div *ngIf="f.password.errors.required">
                                 Password is required
@@ -158,7 +158,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                         />
                         <div
                             *ngIf="submitted && f.passwordConfirm.errors"
-                            class="text-red-500 text-xs italic"
+                            class="absolute text-red-500 text-xs italic"
                         >
                             <div *ngIf="f.passwordConfirm.errors.required">
                                 Password confirmation is required
@@ -171,6 +171,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                     <div class="flex items-center justify-between pt-3">
                         <button
                             [disabled]="loading"
+                            type="submit"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
                             Register
@@ -186,7 +187,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
             </div>
         </div>
     `,
-    styles: [``]
+    styles: []
 })
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup
@@ -227,10 +228,11 @@ export class RegisterComponent implements OnInit {
 
         this.loading = true
         this.api
-            .register(this.registerForm.value)
+            .register<{ id: number }>(this.registerForm.value)
             .pipe(first())
             .subscribe(
-                () => {
+                data => {
+                    console.log("register", data.id) // DEBUG
                     this.router.navigate(["/login"])
                 },
                 error => {

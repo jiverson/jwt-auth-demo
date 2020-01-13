@@ -1,31 +1,41 @@
 import { Injectable } from "@angular/core"
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from "@angular/common/http"
+import {
+    HttpEvent,
+    HttpInterceptor,
+    HttpHandler,
+    HttpRequest,
+    HttpErrorResponse
+} from "@angular/common/http"
 import { throwError, Observable, BehaviorSubject, of } from "rxjs"
-import { catchError, filter, finalize, take, switchMap } from "rxjs/operators"
+import { catchError, filter, finalize, take, switchMap, tap } from "rxjs/operators"
 import jwtDecode from "jwt-decode"
+import { AuthService } from "./auth.service"
+import { ApiService } from "./api.service"
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     private readonly AUTH_HEADER = "Authorization"
-    private token = "secrettoken"
+    private accessTokenField = "access_token"
     private refreshTokenInProgress = false
     private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null)
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // console.log("1 ==============--> intercept") // DEBUG
+    constructor(private auth: AuthService, private api: ApiService) {}
+
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log("1 ==============--> intercept", request.url) // DEBUG
         // if (!req.url.includes("auth")) {
         //     return next.handle(req)
         // }
-        console.warn("AuthInterceptor")
-        if (!req.headers.has("Content-Type")) {
-            req = req.clone({
-                headers: req.headers.set("Content-Type", "application/json")
+
+        if (!request.headers.has("Content-Type")) {
+            request = request.clone({
+                headers: request.headers.set("Content-Type", "application/json")
             })
         }
 
-        req = this.addAuthenticationToken(req)
+        request = this.addAuthenticationToken(request)
 
-        return next.handle(req).pipe(
+        return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
                 if (error && error.status === 401) {
                     // 401 errors are most likely going to be because we have an expired token that we need to refresh.
@@ -35,7 +45,7 @@ export class AuthInterceptor implements HttpInterceptor {
                         return this.refreshTokenSubject.pipe(
                             filter(result => result !== null),
                             take(1),
-                            switchMap(() => next.handle(this.addAuthenticationToken(req)))
+                            switchMap(() => next.handle(this.addAuthenticationToken(request)))
                         )
                     } else {
                         this.refreshTokenInProgress = true
@@ -46,7 +56,7 @@ export class AuthInterceptor implements HttpInterceptor {
                         return this.refreshAccessToken().pipe(
                             switchMap((success: boolean) => {
                                 this.refreshTokenSubject.next(success)
-                                return next.handle(this.addAuthenticationToken(req))
+                                return next.handle(this.addAuthenticationToken(request))
                             }),
                             // When the call to refreshToken completes we reset the refreshTokenInProgress to false
                             // for the next time the token needs to be refreshed
@@ -61,21 +71,56 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     private refreshAccessToken(): Observable<any> {
-        return of("secret token")
+        // return of("secret token")
+        return this.api.refreshToken().pipe(
+            tap(value => {
+                console.log("1 --> value", value) // DEBUG
+            })
+        )
+    }
+
+    private isTokenValidOrUndefined(): boolean {
+        const token = this.auth.credentials?.access_token
+
+        if (!token) {
+            return true
+        }
+
+        try {
+            const { exp } = jwtDecode(token)
+            if (Date.now() >= exp * 1000) {
+                return false
+            } else {
+                return true
+            }
+        } catch {
+            return false
+        }
     }
 
     private addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
         // If we do not have a token yet then we should not set the header.
         // Here we could first retrieve the token from where we store it.
-        if (!this.token) {
+        if (!this.auth.credentials?.access_token) {
             return request
         }
+
         // If you are calling an outside domain then do not add the token.
         // if (!request.url.match(/www.mydomain.com\//)) {
         //     return request
         // }
         return request.clone({
-            headers: request.headers.set(this.AUTH_HEADER, "Bearer " + this.token)
+            headers: request.headers.set(
+                this.AUTH_HEADER,
+                `Bearer ${this.auth.credentials.access_token}`
+            )
         })
+    }
+
+    private extractToken = (body: any): string => {
+        if (body.data) {
+            return body.data[this.accessTokenField]
+        }
+        return body[this.accessTokenField]
     }
 }
