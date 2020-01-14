@@ -43,7 +43,7 @@ export class ApiService {
         return this.http.get(`${baseUrl}/profile`)
     }
 
-    refreshToken(): Observable<any> {
-        return this.http.post(`${baseUrl}/refresh_token`, { foo: "bar" }, { withCredentials: true })
+    refreshToken<T>(): Observable<T> {
+        return this.http.post<T>(`${baseUrl}/refresh_token`, {}, { withCredentials: true })
     }
 }
