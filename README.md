@@ -56,8 +56,9 @@ $ http -v GET http://127.0.0.1:9090/me
 * https://github.com/newsiberian/apollo-link-token-refresh
 * https://blog.angular-university.io/angular-jwt-authentication/
 * https://github.com/http-party/node-http-proxy
-
-
+* https://github.com/angular/angular/issues/20203
+* https://github.com/angular/angular/issues/18155
+* [Refresh tokens](https://gist.github.com/ziluvatar/a3feb505c4c0ec37059054537b38fc48)
 
 
 #### Notes
@@ -65,6 +66,6 @@ $ http -v GET http://127.0.0.1:9090/me
 
 #### TODO
 * add in joi celebrate
-* add in proper claims for jwt token information
+* add in proper claims for jwt token information?
 * use sqllite
 

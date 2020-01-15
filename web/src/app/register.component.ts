@@ -35,60 +35,28 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                 >
                     <h1 class="block text-gray-700 text-5xl mb-2">Register</h1>
                     <div class="mb-6">
-                        <label
-                            for="firstName"
-                            class="block text-gray-700 text-sm font-bold mb-2"
-                        >
-                            First Name
+                        <label for="username" class="block text-gray-700 text-sm font-bold mb-2">
+                            Choose your username
                         </label>
                         <input
-                            formControlName="firstName"
+                            formControlName="username"
                             type="text"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             [ngClass]="{
-                                'border-red-500 focus:shadow-none':
-                                    submitted && f.firstName.errors
+                                'border-red-500 focus:shadow-none': submitted && f.username.errors
                             }"
                         />
                         <div
-                            *ngIf="submitted && f.firstName.errors"
+                            *ngIf="submitted && f.username.errors"
                             class="absolute text-red-500 text-xs italic"
                         >
-                            <div *ngIf="f.firstName.errors.required">
-                                First Name is required
+                            <div *ngIf="f.username.errors.required">
+                                Username is required
                             </div>
                         </div>
                     </div>
                     <div class="mb-6">
-                        <label
-                            for="lastName"
-                            class="block text-gray-700 text-sm font-bold mb-2"
-                        >
-                            Last Name
-                        </label>
-                        <input
-                            formControlName="lastName"
-                            type="text"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            [ngClass]="{
-                                'border-red-500 focus:shadow-none':
-                                    submitted && f.lastName.errors
-                            }"
-                        />
-                        <div
-                            *ngIf="submitted && f.lastName.errors"
-                            class="absolute text-red-500 text-xs italic"
-                        >
-                            <div *ngIf="f.lastName.errors.required">
-                                Last Name is required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <label
-                            for="email"
-                            class="block text-gray-700 text-sm font-bold mb-2"
-                        >
+                        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
                             Email
                         </label>
                         <input
@@ -96,8 +64,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                             type="text"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             [ngClass]="{
-                                'border-red-500 focus:shadow-none':
-                                    submitted && f.email.errors
+                                'border-red-500 focus:shadow-none': submitted && f.email.errors
                             }"
                         />
                         <div
@@ -113,10 +80,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                         </div>
                     </div>
                     <div class="mb-6">
-                        <label
-                            for="password"
-                            class="block text-gray-700 text-sm font-bold mb-2"
-                        >
+                        <label for="password" class="block text-gray-700 text-sm font-bold mb-2">
                             Password
                         </label>
                         <input
@@ -124,8 +88,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                             type="password"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             [ngClass]="{
-                                'border-red-500 focus:shadow-none':
-                                    submitted && f.password.errors
+                                'border-red-500 focus:shadow-none': submitted && f.password.errors
                             }"
                         />
                         <div
@@ -203,8 +166,7 @@ export class RegisterComponent implements OnInit {
     ngOnInit() {
         this.registerForm = this.formBuilder.group(
             {
-                firstName: ["", Validators.required],
-                lastName: ["", Validators.required],
+                username: ["", Validators.required],
                 email: ["", [Validators.required, Validators.email]],
                 password: ["", [Validators.required, Validators.minLength(6)]],
                 passwordConfirm: ["", [Validators.required]]

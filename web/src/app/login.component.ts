@@ -3,7 +3,7 @@ import { ApiService } from "src/app/api.service"
 import { Router } from "@angular/router"
 import { FormGroup, FormBuilder, Validators } from "@angular/forms"
 
-import { AuthService, Credentials } from "./auth.service"
+import { CredentialsService, Credentials } from "./credentials.service"
 
 @Component({
     template: `
@@ -87,7 +87,7 @@ export class LoginComponent {
         private api: ApiService,
         private router: Router,
         private formBuilder: FormBuilder,
-        private auth: AuthService
+        private creds: CredentialsService
     ) {}
 
     ngOnInit() {
@@ -111,8 +111,7 @@ export class LoginComponent {
         this.loading = true
         this.api.login<Credentials>(this.loginForm.value).subscribe(
             data => {
-                console.log("login", data)
-                this.auth.setCredentials(data)
+                this.creds.setCredentials(data)
                 this.router.navigate(["/profile"])
             },
             error => {

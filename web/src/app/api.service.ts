@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core"
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Observable, of } from "rxjs"
-import { tap } from "rxjs/operators"
 
 const baseUrl = "api"
 
@@ -11,6 +10,8 @@ export interface LoginContext {
 }
 
 export interface RegisterContext extends LoginContext {}
+
+export const SKIP_AUTH_HEADER = new HttpHeaders().set("X-Skip-AuthInterceptor", "")
 
 @Injectable({
     providedIn: "root"
@@ -44,6 +45,10 @@ export class ApiService {
     }
 
     refreshToken<T>(): Observable<T> {
-        return this.http.post<T>(`${baseUrl}/refresh_token`, {}, { withCredentials: true })
+        return this.http.post<T>(
+            `${baseUrl}/refresh_token`,
+            {},
+            { headers: SKIP_AUTH_HEADER, withCredentials: true }
+        )
     }
 }
