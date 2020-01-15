@@ -3,6 +3,7 @@ import { ApiService } from "./api.service"
 import { Router } from "@angular/router"
 import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 import { first } from "rxjs/operators"
+import { AuthenticationService } from "src/app/authentication.service"
 
 // custom validator to check that two fields match
 export function MustMatch(controlName: string, matchingControlName: string) {
@@ -158,9 +159,9 @@ export class RegisterComponent implements OnInit {
     submitted = false
 
     constructor(
-        private api: ApiService,
-        private router: Router,
-        private formBuilder: FormBuilder
+        private auth: AuthenticationService,
+        private formBuilder: FormBuilder,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -189,12 +190,11 @@ export class RegisterComponent implements OnInit {
         }
 
         this.loading = true
-        this.api
+        this.auth
             .register<{ id: number }>(this.registerForm.value)
             .pipe(first())
             .subscribe(
                 data => {
-                    console.log("register", data.id) // DEBUG
                     this.router.navigate(["/login"])
                 },
                 error => {

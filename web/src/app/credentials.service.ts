@@ -1,4 +1,10 @@
 import { Injectable } from "@angular/core"
+import { HttpClient } from "@angular/common/http"
+import { Observable } from "rxjs"
+import { tap } from "rxjs/operators"
+
+import { environment } from "../environments/environment"
+import { skipTokenHeader } from "./http-headers"
 
 // Customize received credentials here
 export interface Credentials {
@@ -10,15 +16,18 @@ export interface Credentials {
     }
 }
 
-const credentialsKey = "credentials"
+export const isExpired = x => Date.now() >= x * 1000
+export const credentialsKey = "credentials"
 
 @Injectable({
     providedIn: "root"
 })
 export class CredentialsService {
+    private readonly baseUrl: string
     private _credentials: Credentials | null = null
 
-    constructor() {
+    constructor(private http: HttpClient) {
+        this.baseUrl = environment.auth_url
         const savedCredentials =
             sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey)
         if (savedCredentials) {
@@ -42,8 +51,7 @@ export class CredentialsService {
             return true
         }
 
-        const exp = Date.now() >= expiresIn * 1000
-        return !exp
+        return !isExpired(expiresIn)
     }
 
     setCredentials(credentials?: Credentials, remember = true) {
@@ -57,5 +65,15 @@ export class CredentialsService {
 
         const storage = remember ? localStorage : sessionStorage
         storage.setItem(credentialsKey, JSON.stringify(credentials))
+    }
+
+    refreshToken(): Observable<Credentials> {
+        return this.http
+            .post<Credentials>(
+                `${this.baseUrl}/refresh_token`,
+                {},
+                { headers: skipTokenHeader, withCredentials: true }
+            )
+            .pipe(tap(data => this.setCredentials(data)))
     }
 }

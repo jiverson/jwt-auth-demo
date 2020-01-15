@@ -3,22 +3,20 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from "@angular/c
 import { Observable, BehaviorSubject } from "rxjs"
 import { filter, finalize, take, switchMap } from "rxjs/operators"
 
-import { CredentialsService, Credentials } from "./credentials.service"
-import { ApiService } from "./api.service"
-
-export const InterceptorSkipHeader = "X-Skip-AuthInterceptor"
+import { CredentialsService } from "./credentials.service"
+import { SKIP_TOKEN, authorizationHeader } from "./http-headers"
 
 @Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export class TokenInterceptor implements HttpInterceptor {
     private refreshTokenInProgress = false
     private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null)
 
-    constructor(private creds: CredentialsService, private api: ApiService) {}
+    constructor(private creds: CredentialsService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // Allow ignore certain requests ie refreshToken
-        if (request.headers.has(InterceptorSkipHeader)) {
-            const headers = request.headers.delete(InterceptorSkipHeader)
+        if (request.headers.has(SKIP_TOKEN)) {
+            const headers = request.headers.delete(SKIP_TOKEN)
             return next.handle(request.clone({ headers }))
         }
 
@@ -42,9 +40,8 @@ export class AuthInterceptor implements HttpInterceptor {
             // Set the refreshTokenSubject to null so that subsequent API calls will wait until the new token has been retrieved
             this.refreshTokenSubject.next(null)
 
-            return this.refreshAccessToken().pipe(
+            return this.creds.refreshToken().pipe(
                 switchMap(data => {
-                    this.creds.setCredentials(data)
                     this.refreshTokenSubject.next(data)
                     return next.handle(this.addAuthenticationToken(request))
                 }),
@@ -55,10 +52,6 @@ export class AuthInterceptor implements HttpInterceptor {
         }
     }
 
-    private refreshAccessToken(): Observable<Credentials> {
-        return this.api.refreshToken<Credentials>()
-    }
-
     private addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
         if (!this.creds.isTokenValidOrUndefined()) {
             return request
@@ -66,8 +59,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
         const token = this.creds.credentials?.access_token
 
-        return request.clone({
-            headers: request.headers.set("Authorization", `Bearer ${token}`)
-        })
+        return authorizationHeader(request, token)
     }
 }

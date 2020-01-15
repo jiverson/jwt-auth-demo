@@ -1,9 +1,9 @@
 import { Component } from "@angular/core"
-import { ApiService } from "src/app/api.service"
 import { Router } from "@angular/router"
 import { FormGroup, FormBuilder, Validators } from "@angular/forms"
 
-import { CredentialsService, Credentials } from "./credentials.service"
+import { CredentialsService } from "./credentials.service"
+import { AuthenticationService } from "./authentication.service"
 
 @Component({
     template: `
@@ -57,6 +57,21 @@ import { CredentialsService, Credentials } from "./credentials.service"
                             </div>
                         </div>
                     </div>
+                    <div class="mb-6">
+                        <label
+                            class="block text-gray-500 font-bold"
+                            [ngClass]="{ 'text-gray-700': f.remember.value }"
+                        >
+                            <input
+                                formControlName="remember"
+                                type="checkbox"
+                                class="mr-2 leading-tight"
+                            />
+                            <span class="text-sm">
+                                Remember me
+                            </span>
+                        </label>
+                    </div>
                     <div class="flex items-center justify-between pt-3">
                         <button
                             [disabled]="loading"
@@ -84,16 +99,16 @@ export class LoginComponent {
     submitted = false
 
     constructor(
-        private api: ApiService,
-        private router: Router,
+        private auth: AuthenticationService,
         private formBuilder: FormBuilder,
-        private creds: CredentialsService
+        private router: Router
     ) {}
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
             email: ["billy2@bob.com", [Validators.required]],
-            password: ["test123", [Validators.required]]
+            password: ["test123", [Validators.required]],
+            remember: [true]
         })
     }
 
@@ -109,9 +124,9 @@ export class LoginComponent {
         }
 
         this.loading = true
-        this.api.login<Credentials>(this.loginForm.value).subscribe(
+
+        this.auth.login(this.loginForm.value).subscribe(
             data => {
-                this.creds.setCredentials(data)
                 this.router.navigate(["/profile"])
             },
             error => {
@@ -119,9 +134,5 @@ export class LoginComponent {
                 setTimeout(() => alert(error.statusText))
             }
         )
-    }
-
-    whoami() {
-        this.api.whoami().subscribe()
     }
 }

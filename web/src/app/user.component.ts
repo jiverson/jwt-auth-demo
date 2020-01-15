@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core"
 import { ApiService } from "./api.service"
 import { Router } from "@angular/router"
+import { AuthenticationService } from "./authentication.service"
 
 @Component({
     selector: "app-root",
@@ -29,10 +30,14 @@ export class UserComponent implements OnInit {
     email: string | null
     id: number | null
 
-    constructor(private api: ApiService, private router: Router) {}
+    constructor(
+        private api: ApiService,
+        private auth: AuthenticationService,
+        private router: Router
+    ) {}
 
     ngOnInit() {
-        this.api.profile().subscribe(
+        this.api.profile<{ id: number; email: string }>().subscribe(
             data => {
                 this.email = data.email
                 this.id = data.id
@@ -44,10 +49,6 @@ export class UserComponent implements OnInit {
     }
 
     logout() {
-        console.log("1 --> logout") // DEBUG
-    }
-
-    helloWorld() {
-        this.api.helloWorld().subscribe()
+        this.auth.logout().subscribe(() => this.router.navigate(["/login"]))
     }
 }

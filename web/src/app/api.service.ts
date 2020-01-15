@@ -1,54 +1,27 @@
 import { Injectable } from "@angular/core"
-import { HttpClient, HttpHeaders } from "@angular/common/http"
-import { Observable, of } from "rxjs"
-
-const baseUrl = "api"
-
-export interface LoginContext {
-    email: string
-    password: string
-}
-
-export interface RegisterContext extends LoginContext {}
-
-export const SKIP_AUTH_HEADER = new HttpHeaders().set("X-Skip-AuthInterceptor", "")
+import { HttpClient } from "@angular/common/http"
+import { Observable } from "rxjs"
+import { environment } from "../environments/environment"
 
 @Injectable({
     providedIn: "root"
 })
 export class ApiService {
-    constructor(private http: HttpClient) {}
+    private readonly baseUrl: string
+
+    constructor(private http: HttpClient) {
+        this.baseUrl = environment.api_url
+    }
 
     helloWorld(): Observable<any> {
-        return this.http.get(baseUrl, { responseType: "text" })
+        return this.http.get(this.baseUrl, { responseType: "text" })
     }
 
-    register<T>(context: RegisterContext): Observable<T> {
-        return this.http.post<T>(`${baseUrl}/register`, context)
+    whoami<T>(): Observable<T> {
+        return this.http.get<T>(`${this.baseUrl}/whoami`)
     }
 
-    login<T>(context: LoginContext): Observable<T> {
-        return this.http.post<T>(`${baseUrl}/login`, context)
-    }
-
-    logout(): Observable<any> {
-        return of("logout")
-        // return this.http.post(`${baseUrl}/logout`, this.httpOptions)
-    }
-
-    whoami(): Observable<any> {
-        return this.http.get(`${baseUrl}/whoami`)
-    }
-
-    profile(): Observable<any> {
-        return this.http.get(`${baseUrl}/profile`)
-    }
-
-    refreshToken<T>(): Observable<T> {
-        return this.http.post<T>(
-            `${baseUrl}/refresh_token`,
-            {},
-            { headers: SKIP_AUTH_HEADER, withCredentials: true }
-        )
+    profile<T>(): Observable<T> {
+        return this.http.get<T>(`${this.baseUrl}/profile`)
     }
 }
