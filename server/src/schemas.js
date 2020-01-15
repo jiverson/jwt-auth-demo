@@ -1,11 +1,13 @@
-const Joi = require("@hapi/joi")
+const joi = require("@hapi/joi")
 
-const usersDataSchema = Joi.object({
-    email: Joi.string()
+const usersDataSchema = joi.object({
+    email: joi
+        .string()
         .email()
         .lowercase()
         .required(),
-    password: Joi.string()
+    password: joi
+        .string()
         .min(7)
         .alphanum()
         .required()

@@ -1,4 +1,3 @@
-const Joi = require("@hapi/joi")
 const schemas = require("./schemas")
 
 const supportedMethods = ["post", "put"]
