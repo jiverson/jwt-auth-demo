@@ -59,6 +59,8 @@ $ http -v GET http://127.0.0.1:9090/me
 * https://github.com/angular/angular/issues/20203
 * https://github.com/angular/angular/issues/18155
 * [Refresh tokens](https://gist.github.com/ziluvatar/a3feb505c4c0ec37059054537b38fc48)
+* [Tailwind](https://dev.to/seankerwin/angular-8-tailwind-css-guide-3m45)
+* [Stylelint](https://github.com/bradlc/vscode-tailwindcss/issues/78)
 
 
 #### Notes

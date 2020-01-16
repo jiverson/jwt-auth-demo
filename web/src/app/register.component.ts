@@ -133,17 +133,10 @@ export function MustMatch(controlName: string, matchingControlName: string) {
                         </div>
                     </div>
                     <div class="flex items-center justify-between pt-3">
-                        <button
-                            [disabled]="loading"
-                            type="submit"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        >
+                        <button [disabled]="loading" type="submit" class="btn">
                             Register
                         </button>
-                        <a
-                            class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-                            routerLink="/login"
-                        >
+                        <a class="btn-link" routerLink="/login">
                             Cancel
                         </a>
                     </div>

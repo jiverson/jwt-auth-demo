@@ -1,0 +1,20 @@
+.btn {
+    @apply px-4 py-2 rounded font-bold bg-blue-500 text-white;
+    transition: 200ms;
+}
+
+.btn:hover {
+    @apply bg-blue-700;
+}
+
+.btn:focus {
+    @apply shadow-outline outline-none;
+}
+
+.btn-link {
+    @apply inline-block align-baseline font-bold text-sm text-blue-500;
+}
+
+.btn-link:hover {
+    @apply text-blue-800;
+}
