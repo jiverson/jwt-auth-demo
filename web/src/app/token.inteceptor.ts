@@ -20,10 +20,12 @@ export class TokenInterceptor implements HttpInterceptor {
             return next.handle(request.clone({ headers }))
         }
 
-        // If we do not have a token do not add
-        if (this.creds.isTokenValidOrUndefined()) {
-            request = this.addAuthenticationToken(request)
+        if (!this.creds.token) {
             return next.handle(request)
+        }
+
+        if (!this.creds.isTokenExpired()) {
+            return next.handle(this.addAuthenticationToken(request))
         }
 
         if (this.refreshTokenInProgress) {
@@ -53,11 +55,11 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     private addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
-        if (!this.creds.isTokenValidOrUndefined()) {
+        const token = this.creds.token
+
+        if (!token) {
             return request
         }
-
-        const token = this.creds.credentials?.access_token
 
         return authorizationHeader(request, token)
     }

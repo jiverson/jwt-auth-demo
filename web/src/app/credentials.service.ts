@@ -5,18 +5,18 @@ import { tap } from "rxjs/operators"
 
 import { environment } from "../environments/environment"
 import { skipTokenHeader } from "./http-headers"
+import jwtDecode from "jwt-decode"
 
 // Customize received credentials here
 export interface Credentials {
     access_token: string
-    expiresIn: number
     user: {
         id: number
         email: string
     }
 }
 
-export const isExpired = x => Date.now() >= x * 1000
+export const isExpired = (n: number) => Date.now() >= n * 1000
 export const credentialsKey = "credentials"
 
 @Injectable({
@@ -24,14 +24,18 @@ export const credentialsKey = "credentials"
 })
 export class CredentialsService {
     private readonly baseUrl: string
+    private expiresIn: number | null = null
     private _credentials: Credentials | null = null
 
     constructor(private http: HttpClient) {
         this.baseUrl = environment.auth_url
+
         const savedCredentials =
             sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey)
         if (savedCredentials) {
             this._credentials = JSON.parse(savedCredentials)
+            const { exp } = jwtDecode(this._credentials.access_token)
+            this.expiresIn = exp
         }
     }
 
@@ -39,29 +43,30 @@ export class CredentialsService {
         return this._credentials
     }
 
+    get token(): string | null {
+        return this.credentials?.access_token
+    }
+
+    isTokenExpired(): boolean {
+        return isExpired(this.expiresIn)
+    }
+
     isAuthenticated(): boolean {
         return !!this.credentials
     }
 
-    isTokenValidOrUndefined(): boolean {
-        const token = this.credentials?.access_token
-        const expiresIn = this.credentials?.expiresIn
-
-        if (!token || !expiresIn) {
-            return true
-        }
-
-        return !isExpired(expiresIn)
-    }
-
-    setCredentials(credentials?: Credentials, remember = true) {
+    setCredentials(credentials?: Credentials, remember = false) {
         this._credentials = credentials || null
 
         if (!credentials) {
+            this.expiresIn = null
             sessionStorage.removeItem(credentialsKey)
             localStorage.removeItem(credentialsKey)
             return
         }
+
+        const { exp } = jwtDecode(credentials.access_token)
+        this.expiresIn = exp
 
         const storage = remember ? localStorage : sessionStorage
         storage.setItem(credentialsKey, JSON.stringify(credentials))
@@ -74,6 +79,6 @@ export class CredentialsService {
                 {},
                 { headers: skipTokenHeader, withCredentials: true }
             )
-            .pipe(tap(data => this.setCredentials(data)))
+            .pipe(tap(data => this.setCredentials(data, true)))
     }
 }

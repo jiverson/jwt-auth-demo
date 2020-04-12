@@ -6,11 +6,7 @@ exports.createRefreshToken = ({ id: userId, tokenVersion }) =>
         expiresIn: "7d"
     })
 
-exports.createAccessToken = ({ id: userId }) => {
-    const exp = timespan("15m")
-
-    return {
-        token: sign({ userId, exp }, process.env.ACCESS_TOKEN_SECRET),
-        expiresIn: exp
-    }
-}
+exports.createAccessToken = ({ id: userId }) =>
+    sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "15m"
+    })

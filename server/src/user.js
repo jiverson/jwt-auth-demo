@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
 
     // omit password
     const { password: removed, tokenVersion, ...data } = user
-    const { token: access_token, expiresIn } = createAccessToken(user)
+    const { token: access_token } = createAccessToken(user)
 
     res.cookie("jid", createRefreshToken(user), {
         httpOnly: true,
@@ -50,7 +50,6 @@ exports.login = async (req, res) => {
 
     res.send({
         access_token,
-        expiresIn,
         user: data
     })
 }
@@ -90,11 +89,10 @@ exports.refreshToken = async (req, res) => {
 
     // omit password
     const { password: removed, tokenVersion, ...data } = user
-    const { token: access_token, expiresIn } = createAccessToken(user)
+    const { token: access_token } = createAccessToken(user)
 
     return res.send({
         access_token,
-        expiresIn,
         user: data
     })
 }
