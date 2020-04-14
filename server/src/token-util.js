@@ -3,7 +3,7 @@ const timespan = require("jsonwebtoken/lib/timespan")
 
 exports.createRefreshToken = ({ id: userId, tokenVersion }) =>
     sign({ userId, tokenVersion }, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: "7d"
+        expiresIn: "7d",
     })
 
 exports.createAccessToken = ({ id: userId }) => {
@@ -11,6 +11,6 @@ exports.createAccessToken = ({ id: userId }) => {
 
     return {
         token: sign({ userId, exp }, process.env.ACCESS_TOKEN_SECRET),
-        expiresIn: exp
+        expiresIn: exp,
     }
 }

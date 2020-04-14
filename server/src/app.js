@@ -8,7 +8,7 @@ const routes = require("./routes")
 
 const corsOptions = {
     origin: "http://localhost:9000",
-    credentials: true
+    credentials: true,
 }
 
 ;(async () => {

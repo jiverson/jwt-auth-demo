@@ -12,6 +12,8 @@ services:
     ports:
       - 54320:5432
     volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - db-data:/var/lib/postgresql/data
+# Add volumes definition to create volume mysql-data referenced above
 volumes:
   db-data:

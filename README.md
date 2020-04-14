@@ -66,6 +66,7 @@ $ http -v GET http://127.0.0.1:9090/me
 
 #### TODO
 * add in joi celebrate
+* move to ajv.js.org or https://github.com/jquense/yup
 * add in proper claims for jwt token information?
 * use sqllite
 

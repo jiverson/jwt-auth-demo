@@ -32,8 +32,9 @@
     "pg": "^7.3.0"
   },
   "prettier": {
+    "printWidth": 100,
     "semi": false,
     "tabWidth": 4,
-    "printWidth": 100
+    "trailingComma": "all"
   }
 }

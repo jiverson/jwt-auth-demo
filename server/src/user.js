@@ -5,10 +5,10 @@ const db = require("./db")
 
 const { createRefreshToken, createAccessToken } = require("./token-util")
 
-const invalidCredentials = res =>
+const invalidCredentials = (res) =>
     res.status(401).json({
         status: "failed",
-        error: "Your email or your password was entered incorrectly."
+        error: "Your email or your password was entered incorrectly.",
     })
 
 exports.register = async (req, res) => {
@@ -16,7 +16,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await hash(password, 12)
 
     const {
-        rows: [data]
+        rows: [data],
     } = await db.createUser([email, hashedPassword])
 
     res.send(data)
@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
     const { email, password } = req.body
 
     const {
-        rows: [user]
+        rows: [user],
     } = await db.findUserByEmail([email])
 
     if (!user) {
@@ -45,13 +45,13 @@ exports.login = async (req, res) => {
 
     res.cookie("jid", createRefreshToken(user), {
         httpOnly: true,
-        path: "/refresh_token"
+        path: "/refresh_token",
     })
 
     res.send({
         access_token,
         expiresIn,
-        user: data
+        user: data,
     })
 }
 
@@ -71,7 +71,7 @@ exports.refreshToken = async (req, res) => {
     }
 
     const {
-        rows: [user]
+        rows: [user],
     } = await db.getToken([payload.userId])
 
     if (!user) {
@@ -95,7 +95,7 @@ exports.refreshToken = async (req, res) => {
     return res.send({
         access_token,
         expiresIn,
-        user: data
+        user: data,
     })
 }
 
@@ -115,7 +115,7 @@ exports.profile = async (_req, res) => {
     const { payload } = res.locals
 
     const {
-        rows: [user]
+        rows: [user],
     } = await db.findUserById([payload.userId])
 
     res.send(user)

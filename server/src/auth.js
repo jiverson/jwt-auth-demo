@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     if (!authorization) {
         return res.status(401).json({
             status: "failed",
-            error: "You are not authorized."
+            error: "You are not authorized.",
         })
     }
 
@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
         // throw new Error("not authenticated")
         return res.status(403).json({
             status: "failed",
-            error: "You are not authenticated."
+            error: "You are not authenticated.",
         })
     }
 
