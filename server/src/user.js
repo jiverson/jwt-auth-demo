@@ -1,7 +1,6 @@
+const db = require("./db")
 const { hash, compare } = require("bcryptjs")
 const { verify } = require("jsonwebtoken")
-
-const db = require("./db")
 
 const { createRefreshToken, createAccessToken } = require("./token-util")
 
