@@ -27,6 +27,8 @@ Open up http://localhost:9000
 
 ### User api calls
 
+* Add `http --verify=no` for secure posts
+
 ```sh
 $ # Hello world
 $ http GET http://127.0.0.1:9090/
@@ -35,7 +37,7 @@ $ # revoke token
 $ http -v POST http://127.0.0.1:9090/revoke_token/ userId=1
 
 $ # register
-$ http -v POST http://127.0.0.1:9090/register/ email=foo2@bar.com password=123456ww
+$ http -v POST http://127.0.0.1:9090/register/ email=foo@bar.com password=12345678
 
 $ # login
 $ http -v POST http://127.0.0.1:9090/login/ email=foo2@bar.com password=123456ww
@@ -60,12 +62,11 @@ $ http -v GET http://127.0.0.1:9090/me
 * https://github.com/angular/angular/issues/18155
 * [Refresh tokens](https://gist.github.com/ziluvatar/a3feb505c4c0ec37059054537b38fc48)
 
-
 #### Notes
 - start:dev will not work when running through the front end because of proxy settings
 
 #### TODO
 * add in joi celebrate
+* move to ajv.js.org or https://github.com/jquense/yup
 * add in proper claims for jwt token information?
 * use sqllite
-

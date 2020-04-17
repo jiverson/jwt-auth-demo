@@ -3,12 +3,13 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
+const http = require("http")
 
 const routes = require("./routes")
 
 const corsOptions = {
-    origin: "http://localhost:9000",
-    credentials: true
+    origin: `${process.env.CORS}`,
+    credentials: true,
 }
 
 ;(async () => {
@@ -21,12 +22,13 @@ const corsOptions = {
     app.use(cookieParser())
     app.use("/", routes)
     app.use((err, _req, res, _next) => {
-        console.log("An error was thrown") // DEBUG
+        console.log("-------- An error was thrown --------") // DEBUG
         console.error(err.stack)
+        console.log("-------------------------------------") // DEBUG
         res.json({ message: err.message })
     })
 
-    app.listen(9090, () => {
-        console.log("express server started on port http://localhost:9090")
+    http.createServer({}, app).listen(process.env.PORT, () => {
+        console.log(`express server started on port http://localhost:${process.env.PORT}`)
     })
 })()

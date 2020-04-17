@@ -4,14 +4,16 @@ services:
   db:
     image: postgres:alpine
     restart: always
-    environment:
-      POSTGRES_DB: jwt-auth-demo
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
     container_name: jwt-auth-demo_postgres
+    environment:
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
     ports:
-      - 54320:5432
+      - ${PGPORT}:5432
     volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - db-data:/var/lib/postgresql/data
+# named volumes can be managed easier using docker-compose
 volumes:
   db-data:
