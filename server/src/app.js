@@ -3,13 +3,19 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
-const http = require("http")
+const https = require("https")
+const fs = require("fs")
 
 const routes = require("./routes")
 
 const corsOptions = {
     origin: `${process.env.CORS}`,
     credentials: true,
+}
+
+const serverOptions = {
+    key: fs.readFileSync("server.key"),
+    cert: fs.readFileSync("server.crt"),
 }
 
 ;(async () => {
@@ -28,7 +34,7 @@ const corsOptions = {
         res.json({ message: err.message })
     })
 
-    http.createServer({}, app).listen(process.env.PORT, () => {
-        console.log(`express server started on port http://localhost:${process.env.PORT}`)
+    https.createServer(serverOptions, app).listen(process.env.PORT, () => {
+        console.log(`express server started on port https://localhost:${process.env.PORT}`)
     })
 })()
