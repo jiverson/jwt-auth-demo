@@ -9,7 +9,7 @@ const routes = require("./routes")
 
 const corsOptions = {
     origin: `${process.env.CORS}`,
-    credentials: true,
+    credentials: true
 }
 
 ;(async () => {

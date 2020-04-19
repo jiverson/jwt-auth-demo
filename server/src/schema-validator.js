@@ -4,7 +4,7 @@ const supportedMethods = ["post", "put"]
 const validationOptions = {
     abortEarly: false, // abort after the last validation error
     allowUnknown: true, // allow unknown keys that will be ignored
-    stripUnknown: true, // remove unknown keys from the validated data
+    stripUnknown: true // remove unknown keys from the validated data
 }
 
 module.exports = (useJoiError = false) => (req, res, next) => {
@@ -27,14 +27,14 @@ module.exports = (useJoiError = false) => (req, res, next) => {
                 // fetch only message and type from each error
                 details: error.details.map(({ message, type }) => ({
                     message: message.replace(/['"]/g, ""),
-                    type,
-                })),
-            },
+                    type
+                }))
+            }
         }
 
         const customError = {
             status: "failed",
-            error: "Invalid request data. Please review request and try again.",
+            error: "Invalid request data. Please review request and try again."
         }
 
         // Send back the JSON error response

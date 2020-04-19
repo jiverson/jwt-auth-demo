@@ -46,5 +46,5 @@ module.exports = {
     findUserByEmail: (params) => pool.query(findUserByEmail, params),
     findUserById: (params) => pool.query(findUserById, params),
     getToken: (params) => pool.query(getToken, params),
-    updateToken: (params) => pool.query(updateToken, params),
+    updateToken: (params) => pool.query(updateToken, params)
 }
