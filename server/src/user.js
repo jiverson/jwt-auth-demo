@@ -120,6 +120,6 @@ exports.profile = async (_req, res) => {
     res.send(user)
 }
 
-exports.whoami = (_req, res) => {
+exports.me = (_req, res) => {
     res.send(`your user id is: ${res.locals.payload.userId}`)
 }
