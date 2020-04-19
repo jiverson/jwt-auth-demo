@@ -46,9 +46,7 @@ $ http -v GET http://127.0.0.1:9090/me
 ```
 
 ### Links
-* https://scotch.io/tutorials/node-api-schema-validation-with-joi
 * https://github.com/vitaly-t/pg-promise
-* https://github.com/arb/celebrate
 * https://www.loggly.com/blog/http-status-code-diagram/
 * https://scotch.io/tutorials/the-anatomy-of-a-json-web-token
 * https://blog.angularindepth.com/top-10-ways-to-use-interceptors-in-angular-db450f8a62d6
@@ -66,7 +64,5 @@ $ http -v GET http://127.0.0.1:9090/me
 - start:dev will not work when running through the front end because of proxy settings
 
 #### TODO
-* add in joi celebrate
-* move to ajv.js.org or https://github.com/jquense/yup
 * add in proper claims for jwt token information?
 * use sqllite
