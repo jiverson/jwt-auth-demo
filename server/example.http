@@ -1,0 +1,52 @@
+### Hello World
+GET http://127.0.0.1:9090/ HTTP/1.1
+
+
+### Register
+POST http://127.0.0.1:9090/register/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "foo@bar.com",
+  "password": "12345678"
+}
+
+
+### Login
+# @name login
+POST http://127.0.0.1:9090/login/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "foo@bar.com",
+  "password": "12345678"
+}
+
+
+### Profile
+GET http://127.0.0.1:9090/profile HTTP/1.1
+Authorization: Bearer {{login.response.body.access_token}}
+
+### Revoke
+POST http://127.0.0.1:9090/revoke_token/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "userId": {{login.response.body.user.id}}
+}
+
+
+### Logout
+POST http://127.0.0.1:9090/logout/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access_token}}
+
+
+### Refresh token
+POST http://127.0.0.1:9090/refresh_token/ HTTP/1.1
+Content-Type: application/json
+
+
+### Me
+GET http://127.0.0.1:9090/me HTTP/1.1
+Authorization: Bearer {{login.response.body.access_token}}
