@@ -4,7 +4,7 @@ import { Observable } from "rxjs"
 import { environment } from "../environments/environment"
 
 @Injectable({
-    providedIn: "root"
+    providedIn: "root",
 })
 export class ApiService {
     private readonly baseUrl: string
@@ -17,8 +17,8 @@ export class ApiService {
         return this.http.get(this.baseUrl, { responseType: "text" })
     }
 
-    whoami<T>(): Observable<T> {
-        return this.http.get<T>(`${this.baseUrl}/whoami`)
+    me<T>(): Observable<T> {
+        return this.http.get<T>(`${this.baseUrl}/me`)
     }
 
     profile<T>(): Observable<T> {
