@@ -50,3 +50,4 @@ POST /refresh_token
 #### TODO
 * add in proper claims for jwt token information?
 * use sqllite
+* info
