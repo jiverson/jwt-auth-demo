@@ -1,5 +1,7 @@
 ## Application demonstrating auth service with in-memory tokens
 
+![Diagram](https://drive.google.com/uc?export=view&id=15XzYT7V5DxJ_x1kOXm8i6nXzgzoL4hs0)
+
 ### Running the service
 
 Start the database:
